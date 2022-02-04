@@ -1,0 +1,49 @@
+version: "3.9"
+   
+services:
+    db:
+      image: postgres:13
+      volumes:
+        - ./data/db:/var/lib/postgresql/data
+  #      - postgres:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_DB=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      ports:
+        - "5432:5432"
+
+    web:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      command: python manage.py runserver 0.0.0.0:8000
+#      command: Docker/app-entrypoint.sh
+      volumes:
+        - .:/test_proj
+      ports:
+        - "8000:8000"
+      depends_on:
+        - db
+#        - redis
+
+#    redis:
+#      image: "redis:alpine"
+#
+#    celery:
+#        build:
+#          context: .
+#          dockerfile: Docker/Dockerfile
+#        command: celery -A app worker -l INFO
+#        volumes:
+#          - .:/app
+#        environment:
+#            - DEBUG=1
+#            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+#            - CELERY_BROKER=redis://redis:6379/0
+#            - CELERY_BACKEND=redis://redis:6379/0
+#        depends_on:
+#            - web
+#            - redis
+
+
