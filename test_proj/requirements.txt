@@ -1,4 +1,4 @@
-Django>=3.0,<4.0
+Django>=3.0,<3.6
 psycopg2-binary>=2.8
 django-rest-swagger==2.2.0
 djangorestframework==3.12.4
@@ -6,8 +6,8 @@ djangorestframework-simplejwt==4.6.0
 markdown
 django-filter
 pillow
-django-rest-swagger
 drf-yasg
 django-cors-headers
 openpyxl
 django-cleanup
+django-vote

@@ -10,9 +10,12 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(default=serializers.CurrentUserDefault())
+    # user = serializers.HiddenField(
+    #     default=serializers.CurrentUserDefault(),
+    # )
+    # user = serializers.CharField(default=serializers.CurrentUserDefault())
+    vote_score = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Post
-        fields = "__all__"
-
+        fields = ['id', 'user', 'title', 'text', 'vote_score']
