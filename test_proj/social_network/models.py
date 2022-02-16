@@ -23,8 +23,10 @@ class Post(models.Model):
     title = models.CharField(max_length=120, blank=False)
     text = models.TextField(max_length=1500, blank=False)
     created_at = models.DateTimeField(default=now(), blank=True)
-    user = models.ForeignKey(to=UserModel, related_name='user_post', on_delete=models.CASCADE)
-    likes = models.ManyToManyField(UserModel, through='Like', blank=True)
+    user = models.ForeignKey(
+        to=UserModel, related_name="user_post", on_delete=models.CASCADE
+    )
+    likes = models.ManyToManyField(UserModel, through="Like", blank=True)
 
     class Meta:
         verbose_name = "Post"
