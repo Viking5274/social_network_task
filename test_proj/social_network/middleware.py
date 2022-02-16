@@ -23,7 +23,7 @@ class UpdateLastActivityMiddleware:
             and request.path == "/token/"
             and response.status_code == status.HTTP_200_OK
         ):
-            UserModel.objects.filter(id=request.user.id).update(
+            UserModel.objects.filter(username=request._post['username']).update(
                 last_login=timezone.now()
             )
         return response
