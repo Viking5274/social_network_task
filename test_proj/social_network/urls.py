@@ -8,7 +8,6 @@ from rest_framework_simplejwt import views as jwt_views
 from . import views
 
 router = DefaultRouter()
-# router.register(r"users", views.CreateUserModelViewSet, basename="User")
 router.register(r"posts", views.PostViewSet, basename="Post")
 router.register(r"likes", views.LikeViewSet, basename="Like")
 router.register(

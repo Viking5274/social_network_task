@@ -10,9 +10,6 @@ class UpdateLastActivityMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        # print(request.__dict__)
-        # print(response.__dict__)
-        # print(request.user.id)
         assert hasattr(
             request, "user"
         ), "The UpdateLastActivityMiddleware requires authentication middleware to be installed."
@@ -21,8 +18,6 @@ class UpdateLastActivityMiddleware:
                 last_activity=timezone.now()
             )
 
-        # print(request.__dict__)
-        # print(response.__dict__)
         if (
             request.method == "POST"
             and request.path == "/token/"

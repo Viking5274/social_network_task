@@ -30,10 +30,9 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class LikeViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
+class LikeViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
-    http_method_names = ('post', 'delete', )
 
     @action(detail=False, http_method_names=('get', ))
     def analytics(self, request):

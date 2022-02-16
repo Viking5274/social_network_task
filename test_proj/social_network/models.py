@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, User
 from django.utils.timezone import now
 
 
@@ -44,7 +44,8 @@ class Like(models.Model):
 
     def save(self, *args, **kwargs):
         try:
-            obj = Like.objects.filter(user=self.user, post=self.post)
-            obj.update(status=self.status)
+            obj = Like.objects.get(user=self.user, post=self.post)
+            obj.status = self.status
+            super(Like, obj).save(*args, **kwargs)
         except:
             super(Like, self).save(*args, **kwargs)
