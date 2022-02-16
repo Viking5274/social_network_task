@@ -1,10 +1,10 @@
 from django.contrib.auth.hashers import make_password
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.utils.timezone import now
 
 
-class UserModel(User):
+class UserModel(AbstractUser):
     last_activity = models.DateTimeField(default=now(), blank=True)
 
     class Meta:
@@ -35,10 +35,14 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    status = models.BooleanField(null=True)
+    status = models.BooleanField(default=None)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=now(), blank=True)
+    created_at = models.DateField(default=now(), blank=True)
 
-    class Meta:
-        unique_together = ['user', 'post']
+    def save(self, *args, **kwargs):
+        try:
+            obj = Like.objects.filter(user=self.user, post=self.post)
+            obj.update(status=self.status)
+        except:
+            super(Like, self).save(*args, **kwargs)

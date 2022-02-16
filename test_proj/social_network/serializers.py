@@ -26,12 +26,13 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
-        fields = ('user', 'post')
+        fields = ('user', 'post', 'status')
 
 
 class LikeAmountByDaySerializer(serializers.Serializer):
-    date_created = serializers.DateField()
+    created_at = serializers.DateField()
     likes_amount = serializers.IntegerField()
+    dislikes_amount = serializers.IntegerField()
 
 
 class UserActivitySerializer(serializers.ModelSerializer):

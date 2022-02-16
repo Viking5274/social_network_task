@@ -7,11 +7,12 @@ from rest_framework_simplejwt import views as jwt_views
 from . import views
 
 router = DefaultRouter()
-router.register(r"users", views.CreateUserModelViewSet, basename="User")
+# router.register(r"users", views.CreateUserModelViewSet, basename="User")
 router.register(r"posts", views.PostViewSet, basename="Post")
 router.register(r"likes", views.LikeViewSet, basename="Like")
 router.register(r'users_activity', views.UserActivityRetrieveListViewSet, basename="UserActivity")
 urlpatterns = [
+    path("users/", views.CreateUserModelViewSet.as_view()),
     path('token/', jwt_views.TokenObtainPairView.as_view()),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view()),
     path('api-auth/', include('rest_framework.urls')),
