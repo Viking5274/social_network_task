@@ -127,3 +127,4 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = "social_network.UserModel"
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'

@@ -1,10 +1,8 @@
-from itertools import chain
-
 from django.db.models import Count, Q
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin, ListModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
@@ -21,7 +19,6 @@ class CreateUserModelViewSet(CreateAPIView):
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    # permission_classes = [IsOwnerOrReadOnly]
     permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -49,7 +46,11 @@ class LikeViewSet(viewsets.ModelViewSet):
         if date_to := self.__parse_string_to_date(date_to_str):
             queryset = queryset.filter(created_at__lte=date_to)
 
-        queryset = queryset.values('created_at').annotate(likes_amount=Count('status', filter=Q(status=True)), dislikes_amount=Count('status', filter=Q(status=False)))
+        queryset = queryset.values('created_at').annotate(
+            likes_amount=Count('status', filter=Q(status=True)),
+            dislikes_amount=Count('status', filter=Q(status=False))
+        )
+
         serializer = LikeAmountByDaySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
