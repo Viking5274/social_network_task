@@ -21,7 +21,9 @@ class UpdateLastActivityMiddleware:
         if (
             request.method == "POST"
             and request.path == "/token/"
-            and response == status.HTTP_200_OK
+            and response.status_code == status.HTTP_200_OK
         ):
-            print("true")
+            UserModel.objects.filter(id=request.user.id).update(
+                last_login=timezone.now()
+            )
         return response

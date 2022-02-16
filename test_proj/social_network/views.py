@@ -33,6 +33,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class LikeViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
+    http_method_names = ['update', 'post', 'delete']
 
     @action(detail=False, http_method_names=('get', ))
     def analytics(self, request):
