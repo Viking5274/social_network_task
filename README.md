@@ -4,7 +4,7 @@
 ____
 First build Dockerfile:
 
-`cd task_prj/`
+`cd task_proj/`
 
 `docker-compose up --build`
 
