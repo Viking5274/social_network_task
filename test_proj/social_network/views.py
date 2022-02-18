@@ -1,36 +1,33 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin, ListModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from dateutil import parser
 
 from .models import UserModel, Post, Like
-from .permissions import IsOwnerOrReadOnly
 from .serializers import UserModelSerializer, PostSerializer, LikeSerializer, LikeAmountByDaySerializer, \
     UserActivitySerializer
 
 
-class CreateUserModelViewSet(viewsets.ModelViewSet):
-    queryset = UserModel.objects.all()
+class CreateUserModelViewSet(CreateAPIView):
     serializer_class = UserModelSerializer
     permission_classes = (AllowAny, )
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
-class LikeViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
+class LikeViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
-    http_method_names = ('post', 'delete')
+    http_method_names = ['update', 'post', 'delete']
 
     @action(detail=False, http_method_names=('get', ))
     def analytics(self, request):
@@ -41,14 +38,17 @@ class LikeViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
         date_to_str = query_params.get('date_to')
 
         if date_from := self.__parse_string_to_date(date_from_str):
-            queryset = queryset.filter(date_created__gte=date_from)
+            queryset = queryset.filter(created_at__gte=date_from)
 
         if date_to := self.__parse_string_to_date(date_to_str):
-            queryset = queryset.filter(date_created__lte=date_to)
+            queryset = queryset.filter(created_at__lte=date_to)
 
-        queryset = queryset.values('date_created').annotate(likes_amount=Count('id'))
+        queryset = queryset.values('created_at').annotate(
+            likes_amount=Count('status', filter=Q(status=True)),
+            dislikes_amount=Count('status', filter=Q(status=False))
+        )
+
         serializer = LikeAmountByDaySerializer(queryset, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def __parse_string_to_date(self, date):

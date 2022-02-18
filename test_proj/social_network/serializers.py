@@ -1,16 +1,12 @@
 from rest_framework import serializers
 
-from .models import (
-    UserModel,
-    Post,
-    Like,
-    )
+from .models import UserModel, Post, Like
 
 
 class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('username','password', 'first_name', 'last_name', 'email')
+        fields = ("username", "password", "first_name", "last_name", "email")
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -18,7 +14,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'title', 'text']
+        fields = ["id", "user", "title", "text"]
 
 
 class LikeSerializer(serializers.ModelSerializer):
@@ -26,16 +22,16 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
-        fields = ('user', 'post')
+        fields = ("user", "post", "status")
 
 
 class LikeAmountByDaySerializer(serializers.Serializer):
-    date_created = serializers.DateField()
+    created_at = serializers.DateField()
     likes_amount = serializers.IntegerField()
+    dislikes_amount = serializers.IntegerField()
 
 
 class UserActivitySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserModel
-        fields = ('id', 'username', 'last_login', 'last_action')
+        fields = ("id", "username", "last_login", "last_activity")
