@@ -21,7 +21,7 @@ class Bot:
         header = {'Authorization': f'Bearer {jwt}'}
         return header
 
-    async def create_user(self):
+    def create_user(self):
         password = self.faker.pystr(min_chars=10, max_chars=20)
         username = self.faker.user_name()
         user_json = {'email': self.faker.email(),
@@ -30,33 +30,32 @@ class Bot:
         req = requests.post(CREATE_USER_URL, data=user_json)
         if req.status_code == 201:
             print('user was created')
-            await self.sign_in(username, password)
+            self.sign_in(username, password)
 
-    async def create_multiple_users(self):
+    def create_multiple_users(self):
         for i in range(MAX_USERS):
-            await self.create_user()
+            self.create_user()
 
-    async def sign_in(self, username, password):
+    def sign_in(self, username, password):
         data = {'username': username, 'password': password}
         req = requests.post(GET_TOKEN_URL, data=data)
         header = self.set_headers(req.json()['access'])
         data['header'] = header
         self.user_list.append(data)
-        await self.create_multiple_posts(header)
-        # await self.like_multiple_post(header)
+        self.create_multiple_posts(header)
 
-    async def create_post(self, header):
+    def create_post(self, header):
         data = {'title': self.faker.sentence(),
                 'text': self.faker.paragraph(10),
                 }
         req = requests.post(CREATE_POST_URL, data=data, headers=header)
         print('post was created')
 
-    async def create_multiple_posts(self, header):
+    def create_multiple_posts(self, header):
         for i in range(MAX_POSTS):
-            await self.create_post(header)
+            self.create_post(header)
 
-    async def like_post(self, header):
+    def like_post(self, header):
         id = random.randrange(1, MAX_POSTS*MAX_USERS)
         choice = [True, False, None]
         status = random.choice(choice)
@@ -65,17 +64,18 @@ class Bot:
         req = requests.post(LIKE_POST_URL, data=data, headers=header)
         print('like was created')
 
-    async def like_multiple_post(self):
+    def like_multiple_post(self):
         for user in self.user_list:
             for i in range(MAX_LIKES):
-                await self.like_post(user['header'])
+                self.like_post(user['header'])
 
 
-async def main():
+def main():
     bot = Bot()
-    await bot.create_multiple_users()
-    await bot.like_multiple_post()
+    bot.create_multiple_users()
+    bot.like_multiple_post()
+
 
 if __name__ == '__main__':
-    # main()
-    asyncio.run(main())
+    main()
+    # asyncio.run(main())
