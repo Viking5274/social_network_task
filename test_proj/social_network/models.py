@@ -1,7 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils.timezone import now
 from django.utils import timezone
 
 
@@ -13,7 +12,7 @@ class UserModel(AbstractUser):
         verbose_name_plural = "Users"
 
     def __str__(self):
-        return "{} {}".format(self.first_name, self.last_name)
+        return "{} {}".format(self.username, self.last_name)
 
     def save(self, *args, **kwargs):
         self.password = make_password(self.password)
