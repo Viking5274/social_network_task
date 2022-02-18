@@ -31,4 +31,4 @@ Launching bot:
 
 ### Changing configuration
 
-You can change `users_amount`, `max_posts_per_user` and `max_likes_per_user` in `conf.py` file
+You can change `MAX_USERS`, `MAX_POSTS` and `MAX_LIKES` in `conf.py` file
