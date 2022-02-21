@@ -23,6 +23,8 @@ First you need to install `requirements.txt` in the root directory:
 
 `pip install -r requirements.txt`
 
+NOTE! You have to run bot, while main app is working!!!
+
 Launching bot:
 
 `cd bot/`
