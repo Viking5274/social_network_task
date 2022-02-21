@@ -4,7 +4,6 @@ django-rest-swagger==2.2.0
 djangorestframework==3.12.4
 django-filter
 django-cors-headers
-django-vote
 djangorestframework-jwt
 djangorestframework-simplejwt==4.6.0
 python-dateutil==2.8.2
